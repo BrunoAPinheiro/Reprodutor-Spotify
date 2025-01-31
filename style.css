@@ -1,0 +1,247 @@
+body {
+    background-image:linear-gradient(rgb(34, 6, 51), rgb(29,40,42));
+    height: 100%; /* Usando altura de 100% para garantir que o fundo degrade cubra toda a tela */        color: white;
+    font-family: sans-serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center; /* centraliza todos os itens dentro do body*/
+    min-height: 100vh; /* Garantir que o corpo ocupe ao menos toda a altura da tela */
+}
+
+button {
+    background-color: inherit;
+    color: inherit;
+    border: none;
+}
+
+#below-cover {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    margin: 3em 0 1em 0;
+}
+
+#like {
+    font-size: 1.5em;
+}
+
+#button-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    align-items: center;
+    padding-top: 1em;
+    color: rgb(183, 192, 194)
+
+}
+
+.button {
+    font-size: 1.5em;
+    cursor: pointer;
+}
+
+.button-navigate {
+    font-size: 3em;
+}
+
+.button-biggest {
+    font-size: 4em;
+}
+
+#cover {
+    width: 100%;
+    max-width: 450px; /* Imagem não fica maior que 450px */
+    border-radius: 3px;
+    display: block;
+    margin: 0 auto; /* Garante que a imagem fique centralizada*/
+}
+
+#playlist-title {
+    font-size: 2em; /* Garante que o título tenha tamanho adequado */    
+    text-align: center;
+    margin: 1em 0;
+}
+
+#song-name {
+    font-size: 1.5em;
+    font-weight: bolder;
+}
+
+.light-color {
+    color: rgb(139,153,156)
+}
+
+#progress-bar {
+    background-color: rgb(139,153,156);
+    height: 3px;
+    width: 100%;
+    border-radius: 15px;
+    cursor: pointer;
+}
+
+#current-progress {
+    --progress: 0%;
+    height: inherit;
+    width: var(--progress);
+    background-color: white;
+    border-radius: inherit;
+}
+
+#progress-container {
+    cursor: pointer;
+}
+
+.button-active {
+    color: rgb(5, 236, 75);
+}
+
+#time-box {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    color: rgb(139,153,156);
+    font-size: smaller;
+    margin-top: 0.5em;
+}
+
+/* Responsividade para telas menores (tablets e celulares) */
+@media (max-width: 768px) {
+    #below-cover {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+    }
+
+    #like {
+        margin-top: 10px;
+    }
+
+    #button-container {
+        flex-wrap: wrap;
+        gap: 10px;
+    }
+
+    .button {
+        font-size: 1.2em;
+    }
+
+    .button-navigate {
+        font-size: 2em;
+    }
+
+    .button-biggest {
+        font-size: 2.5em;
+    }
+
+    #cover {
+        max-width: 200px; /* Diminui a imagem ainda mais */
+        margin: 0 auto; /*Garante que a imagem fique centralizada*/
+    }
+
+    #playlist-title {
+        font-size: 1.3em;
+    }
+}
+
+@media (max-width: 480px) {
+    
+    #playlist-title {
+        font-size: 1.2em;
+    }
+
+    #cover {
+        max-width: 200px; /* Diminui o tamanho da capa para caber melhor */
+        margin: 0 auto; /*Garante que a imagem fique centralizada*/        
+    }
+
+    .button {
+        font-size: 1em;
+    }
+
+    .button-navigate {
+        font-size: 1.8em;
+    }
+
+    .button-biggest {
+        font-size: 2.2em;
+    }
+
+    #progress-container {
+        max-width: 300px;
+    }
+}
+
+@media (max-width: 312px) {
+    body {
+        padding: 10px; /* Adicionando um pequeno padding para não ficar colado nas bordas */
+    }
+
+    #below-cover {
+        flex-direction: column;
+        align-items: center;
+        margin: 2em 0 1em 0;
+    }
+
+    #like {
+        font-size: 1.2em;
+        margin-top: 5px;
+    }
+
+    #button-container {
+        flex-direction: row;
+        align-items: center;
+        gap: 8px; /* Espaçamento maior entre os botões */
+    }
+
+    .button {
+        font-size: 1.1em;
+        padding: 5px;
+    }
+
+    .button-navigate {
+        font-size: 2em;
+    }
+
+    .button-biggest {
+        font-size: 2.5em;
+    }
+
+    #cover {
+        max-width: 180px; /* Diminui o tamanho da capa para caber melhor */
+        margin-bottom: 1em; /* Adiciona um pouco de espaço abaixo da imagem */
+        margin: 0 auto;/*Garante que a imagem fique centralizada*/
+    }
+
+    #playlist-title {
+        font-size: 1.1em; /* Ajusta o tamanho da fonte para caber melhor */
+        margin: 0.5em 0;
+    }
+
+    #song-name {
+        font-size: 1.2em;
+    }
+
+    #progress-bar {
+        height: 2px; /* Diminui a altura da barra de progresso */
+    }
+
+    #current-progress {
+        height: inherit;
+    }
+
+    #time-box {
+        font-size: 0.9em;
+        margin-top: 0.5em;
+    }
+
+    .light-color {
+        font-size: 0.9em;
+    }
+
+    #playlist-title,
+    #song-name {
+        text-align: center; /* Centraliza o título da playlist e o nome da música */
+    }
+}
