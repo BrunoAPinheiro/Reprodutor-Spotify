@@ -3,7 +3,7 @@
 ![Design_sem_nome__3_-removebg-preview](https://github.com/user-attachments/assets/60c279fe-03bd-41a4-8392-fcfada55d1ab)    ![Design_sem_nome__4_-removebg-preview](https://github.com/user-attachments/assets/316c1ec1-f2e5-4f7b-a09d-7c0257e51b58)
 
 
-Visão Geral
+<H1>Visão Geral</H1>
 
 Este projeto consiste em um reprodutor de música inspirado na interface do Spotify, com funcionalidades básicas de controle de reprodução, visualização de capa de álbum, controle de tempo e outras interações típicas de um reprodutor de música.
 
