@@ -111,27 +111,26 @@ body {
     opacity: 1;
 }
 
-/* ============= CAPA DO ÁLBUM ============= */
+/* ============= CAPA DO ÁLBUM ============= */ 
 .album-cover {
-    width: 100%;
-    height: auto;
-    aspect-ratio: 1;
-    object-fit: cover;
-    border-radius: 8px;
-    box-shadow: var(--shadow-elevation);
-    margin: 0 auto;
-    display: block;
-    transition: var(--transition-default);
+    width: 100%; 
+    height: auto; 
+    aspect-ratio: 1; 
+    object-fit: contain; /* Alterado de 'cover' para 'contain' */ 
+    border-radius: 8px; 
+    box-shadow: var(--shadow-elevation); 
+    margin: 0 auto; 
+    display: block; 
+    transition: var(--transition-default); }
+
+.album-cover:hover { 
+    transform: scale(1.02) translateY(-5px); 
+    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.4); 
 }
 
-.album-cover:hover {
-    transform: scale(1.02) translateY(-5px);
-    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.4);
-}
-
-.album-cover.changing {
+.album-cover.changing { 
     transform: scale(0.95);
-    opacity: 0.7;
+    opacity: 0.7; 
 }
 
 /* ============= INFORMAÇÕES DA MÚSICA ============= */
@@ -347,48 +346,79 @@ body {
     transform: scale(0.95);
 }
 
-/* ============= MEDIA QUERIES ============= */
+/* ============= AJUSTES DE LAYOUT ============= */
+
+/* Ajuste do título */
+.track-title {
+    font-size: clamp(0.8em, 2vw, 1em); /* Redução do tamanho do título */
+    margin-bottom: 3px; /* Menor espaçamento inferior */
+    line-height: 1.2; /* Melhor altura da linha */
+}
+
+/* Ajustes da capa do álbum */
+.album-cover {
+    width: 85%; /* Redução da largura para melhor proporção */
+    max-width: 280px; /* Limite máximo de largura */
+    height: auto;
+    aspect-ratio: 1;
+    object-fit: cover;
+    margin: 10px auto; /* Espaçamento vertical reduzido */
+}
+
+/* Ajuste das informações da faixa */
+.track-info {
+    padding: 8px 5px; /* Padding vertical aumentado */
+    margin-top: -5px; /* Aproxima do álbum */
+}
+
+.track-text {
+    max-width: 85%; /* Evita que o texto ultrapasse muito */
+}
+
+/* Ajustes responsivos */
+@media (max-width: 600px) {
+    .album-cover {
+        width: 75%; /* Ainda menor em telas pequenas */
+        height: auto;
+        max-height: none; 
+        margin: 5px auto; /* Menor margem em telas pequenas */
+    }
+
+    .track-title {
+        font-size: clamp(0.75em, 1.8vw, 0.9em); /* Menor em telas pequenas */
+    }
+
+    .track-info {
+        padding: 5px; /* Padding reduzido em telas pequenas */
+    }
+}
+
 @media (max-height: 600px) {
-    .music-player {
-        gap: 10px;
-    }
-
     .album-cover {
-        width: min(200px, 30vh);
-        height: min(200px, 30vh);
-        margin: 0 auto;
+        width: 65%; /* Menor em telas baixas */
+        height: auto;
+        max-height: none;
+        margin: 2px auto;
+    }
+
+    .track-info {
+        margin-top: -3px;
     }
 }
 
-@media (max-width: 480px) {
-    .music-player {
-        padding: 15px;
-        gap: 10px;
-    }
-
-    .control-buttons {
-        gap: 10px;
-    }
-
-    .volume-control input[type="range"] {
-        width: 60px;
-    }
-}
-
+/* Ajuste fino para telas muito pequenas */
 @media (max-width: 320px) {
-    .music-player {
-        padding: 10px;
-        gap: 8px;
+    .album-cover {
+        width: 65%;
+        height: auto;
+        padding-bottom: 0;
     }
 
-    .control-buttons {
-        gap: 8px;
+    .track-title {
+        font-size: clamp(0.6em, 1.5vw, 0.7em);
+    }
+
+    .track-info {
+        padding: 2px 5px;
     }
 }
-
-@media (-webkit-min-device-pixel-ratio: 2), 
-       (min-resolution: 192dpi) {
-    .album-cover {
-        image-rendering: -webkit-optimize-contrast;
-    }
-} 
