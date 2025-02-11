@@ -2,23 +2,43 @@ export default {
     id: 'bonJovi',
     name: "Bon Jovi Hits",
     artist: "Bon Jovi",
-    coverFolder: "bon_jovi", // deve corresponder exatamente ao nome da pasta
-    songsFolder: "bon_jovi", // deve corresponder exatamente ao nome da pasta
+    coverFolder: "bon_jovi",
+    songsFolder: "bon_jovi",
     albums: {
-        slippery_when_wet: {
-            name: "Slippery When Wet",
-            year: 1986,
-            cover: "slippery_when_wet_cover" // deve corresponder ao nome do arquivo sem .jpg
+        new_jersey: {
+            name: "New Jersey",
+            year: 1988,
+            cover: "new_jersey_cover"
         },
-        // ... outros álbuns
+        keep_the_faith: {
+            name: "Keep the Faith",
+            year: 1992,
+            cover: "keep_the_faith_cover"
+        },
+        crush: {
+            name: "Crush",
+            year: 2000,
+            cover: "crush_cover"
+        }
     },
     songs: [
         {
-            title: "Livin' on a Prayer",
+            title: "I'll Be There For You",
             artist: "Bon Jovi",
-            file: "livin_on_a_prayer", // deve corresponder ao nome do arquivo sem .mp3
-            albumId: "slippery_when_wet"
+            file: "ill_be_there_for_you",
+            albumId: "new_jersey"
         },
-        // ... outras músicas
+        {
+            title: "Bed Of Roses",
+            artist: "Bon Jovi",
+            file: "bed_of_roses",
+            albumId: "keep_the_faith"
+        },
+        {
+            title: "It's My Life",
+            artist: "Bon Jovi",
+            file: "its_my_life",
+            albumId: "crush"
+        }
     ]
 };
