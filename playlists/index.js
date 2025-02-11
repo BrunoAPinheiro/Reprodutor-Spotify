@@ -25,7 +25,7 @@ export function getPlaylistTotalDuration(playlist) {
 }
 
 export function formatDuration(count) {
-    return `${count} músicas`;
+    return count;
 }
 
 export function getAlbumTracks(playlist, albumId) {
