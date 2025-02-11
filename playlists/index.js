@@ -1,13 +1,13 @@
 import bonJovi from './bonJovi.js';
 // Comente as outras importações por enquanto
 // import u2 from './u2.js';
-// import bruceSpringsteen from './bruceSpringsteen.js';
+import bruceSpringsteen from './bruceSpringsteen.js';
 // import theDoors from './theDoors.js';
 
 export const playlists = {
     bonJovi,
     // u2,
-    // bruceSpringsteen,
+    bruceSpringsteen,
     // theDoors
 };
 
