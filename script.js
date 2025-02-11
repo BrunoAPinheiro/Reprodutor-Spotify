@@ -75,6 +75,8 @@ function updatePlaylistInfo() {
 }
 
 // ============= FUNÇÕES DO PLAYER =============
+
+
 async function loadTrack() {
     const track = getCurrentTrack();
     const playlist = getCurrentPlaylist();
@@ -83,14 +85,15 @@ async function loadTrack() {
     try {
         await elements.audio.pause();
         
+        
         // Zera o progresso antes de carregar nova música
         elements.progress.current.style.width = '0%';
         elements.progress.time.textContent = '00:00';
         elements.progress.total.textContent = '00:00';
         
         elements.cover.classList.add('changing');
-        elements.cover.src = `images/${playlist.coverFolder}/${album.cover}.jpg`;
-        elements.audio.src = `songs/${playlist.songsFolder}/${track.file}.mp3`;
+        elements.cover.src = `./images/${playlist.coverFolder}/${album.cover}.jpg`;
+        elements.audio.src = `./songs/${playlist.songsFolder}/${track.file}.mp3`;
         elements.songName.textContent = track.title;
         elements.bandName.textContent = track.artist;
         
