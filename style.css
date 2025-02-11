@@ -43,41 +43,16 @@ body {
     padding: 20px;
 }
 
-/* Adicione/atualize estas regras no seu CSS */
-.album-cover {
-    /* ... outras propriedades ... */
-    will-change: transform;
-    transform: translateZ(0);
-    backface-visibility: hidden;
-    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-
-
-.progress-current {
-    /* ... outras propriedades ... */
-    will-change: width;
-    transform: translateZ(0);
-}
-
-/* Otimize as animações dos botões */
-.button-control, .button-play, .button-like {
-    /* ... outras propriedades ... */
-    will-change: transform;
-    transform: translateZ(0);
-    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
 /* ============= PLAYER CONTAINER ============= */
 .music-player {
     background-color: var(--color-surface);
     border-radius: 12px;
     padding: clamp(10px, 3vw, 20px);
     width: var(--player-width);
-    box-shadow: var(--shadow-elevation);
     display: flex;
     flex-direction: column;
     gap: 15px;
+    box-shadow: var(--shadow-elevation);
 }
 
 /* ============= PLAYLIST CONTROLS ============= */
@@ -137,6 +112,7 @@ body {
     transform: scale(0.95);
 }
 
+/* ============= INFORMAÇÕES DO ÁLBUM ============= */
 .album-info-container {
     text-align: center;
     margin: 10px 0;
@@ -148,51 +124,8 @@ body {
     font-style: italic;
 }
 
-/* Ajuste da animação da capa para incluir as informações do álbum */
-.album-info-container {
-    opacity: 1;
-    transition: opacity var(--transition-default);
-}
-
-<<<<<<< HEAD
-.changing ~ .album-info-container {
-    opacity: 0;
-}
-
 /* ============= INFORMAÇÕES DA MÚSICA ============= */
 .track-info {
-=======
-#progress-bar {
-    background-color: rgb(139,153,156);
-    height: 5px;
-    width: 100%;
-    border-radius: 15px;
-    cursor: pointer;
-}
-
-
-#current-progress {
-    --progress: 0%;
-    height: inherit;
-    width: var(--progress);
-    background-color: white;
-    border-radius: inherit;
-}
-
-#progress-container {
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    position: relative;
-}
-
-.button-active {
-    color: rgb(5, 236, 75);
-}
-
-#time-box {
->>>>>>> 893b99830fd067997b27ea0edcf496756d1e7336
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -335,29 +268,22 @@ body {
 }
 
 /* ============= MEDIA QUERIES ============= */
-/* Telas grandes */
-@media (min-width: 1024px) {
+@media (max-height: 600px) {
     .music-player {
-        --player-width: 420px;
+        gap: 10px;
     }
 
-    .music-player:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4);
+    .album-cover {
+        width: min(200px, 30vh);
+        height: min(200px, 30vh);
+        margin: 0 auto;
     }
 }
 
-/* Telas médias */
-@media (max-width: 768px) {
-    .music-player {
-        padding: 15px;
-    }
-}
-
-/* Telas pequenas */
 @media (max-width: 480px) {
     .music-player {
-        padding: 10px;
+        padding: 15px;
+        gap: 10px;
     }
 
     .control-buttons {
@@ -369,15 +295,15 @@ body {
     }
 }
 
-/* Altura pequena */
-@media (max-height: 600px) {
+/* Para telas muito pequenas */
+@media (max-width: 320px) {
     .music-player {
-        gap: 10px;
+        padding: 10px;
+        gap: 8px;
     }
 
-    .album-cover {
-        width: min(200px, 30vh);
-        height: min(200px, 30vh);
+    .control-buttons {
+        gap: 8px;
     }
 }
 
@@ -392,15 +318,3 @@ body {
         backdrop-filter: blur(10px);
     }
 }
-
-
-/*Principais melhorias:
-
-Variáveis CSS: Todas as cores, tamanhos e valores importantes agora são variáveis
-Organização por Seções: Código dividido em seções lógicas com comentários claros
-Reutilização: Propriedades comuns agrupadas em classes base
-Consistência: Uso consistente de variáveis e valores
-Manutenibilidade: Fácil de modificar valores globalmente
-Performance: Redução de duplicação de código
-Escalabilidade: Mais fácil de adicionar novos estilos
-Responsividade: Media queries mais organizadas*/
