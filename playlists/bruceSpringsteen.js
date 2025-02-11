@@ -28,7 +28,7 @@ export default {
         }, greatest_hits: {
             name: "Great Hits",
             year: 1995,
-            cover: "great_hits_cover"
+            cover: "greatest_hits_cover"
         },
         human_touch: {
             name: "Human Touch",
@@ -83,8 +83,8 @@ export default {
         {
             title: "Born to Run",
             artist: "Bruce Springsteen",
-            file: "born_to_run",
-            albumId: "born_to_run"
+            file: "blood_brothers",
+            albumId: "greatest_hits"
         },
         {
             title: "Born in the U.S.A.",
