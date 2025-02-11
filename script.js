@@ -1,3 +1,6 @@
+elements.cover.src = `./images/${playlist.coverFolder}/${track.file}.jpg`;
+elements.audio.src = `./songs/${playlist.songsFolder}/${track.file}.mp3`;
+
 // ============= IMPORTAÇÕES =============
 import { playlists, getPlaylistById, getPlaylistTotalDuration, formatDuration, getAlbumInfo } from './playlists/index.js';
 
