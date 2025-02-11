@@ -1,247 +1,373 @@
+/* ============= VARIÁVEIS CSS ============= */
+:root {
+    /* Cores */
+    --color-primary: #1db954;
+    --color-background-start: rgb(34, 6, 51);
+    --color-background-end: rgb(29, 40, 42);
+    --color-surface: rgba(24, 24, 24, 0.8);
+    --color-text-primary: #ffffff;
+    --color-text-secondary: #b3b3b3;
+    --color-progress-bg: #4f4f4f;
+    
+    /* Sombras */
+    --shadow-elevation: 0 8px 24px rgba(0, 0, 0, 0.3);
+    
+    /* Tamanhos responsivos */
+    --player-width: min(380px, 90vw);
+    --cover-size: min(300px, 50vh);
+    --button-size: clamp(24px, 4vw, 32px);
+    
+    /* Animações */
+    --transition-quick: 0.1s;
+    --transition-default: 0.2s;
+}
+
+/* ============= RESET E BASE ============= */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
 body {
-    background-image:linear-gradient(rgb(34, 6, 51), rgb(29,40,42));
-    height: 100%; /* Usando altura de 100% para garantir que o fundo degrade cubra toda a tela */        color: white;
-    font-family: sans-serif;
+    background-image: linear-gradient(
+        var(--color-background-start),
+        var(--color-background-end)
+    );
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: Arial, sans-serif;
+    color: var(--color-text-primary);
+    padding: 20px;
+}
+
+/* Adicione/atualize estas regras no seu CSS */
+.album-cover {
+    /* ... outras propriedades ... */
+    will-change: transform;
+    transform: translateZ(0);
+    backface-visibility: hidden;
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+
+
+.progress-current {
+    /* ... outras propriedades ... */
+    will-change: width;
+    transform: translateZ(0);
+}
+
+/* Otimize as animações dos botões */
+.button-control, .button-play, .button-like {
+    /* ... outras propriedades ... */
+    will-change: transform;
+    transform: translateZ(0);
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* ============= PLAYER CONTAINER ============= */
+.music-player {
+    background-color: var(--color-surface);
+    border-radius: 12px;
+    padding: clamp(10px, 3vw, 20px);
+    width: var(--player-width);
+    box-shadow: var(--shadow-elevation);
     display: flex;
     flex-direction: column;
-    align-items: center;
-    justify-content: center; /* centraliza todos os itens dentro do body*/
-    min-height: 100vh; /* Garantir que o corpo ocupe ao menos toda a altura da tela */
+    gap: 15px;
 }
 
-button {
-    background-color: inherit;
-    color: inherit;
-    border: none;
-}
-
-#below-cover {
+/* ============= PLAYLIST CONTROLS ============= */
+.playlist-controls {
     display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: center;
-    margin: 3em 0 1em 0;
+    flex-direction: column;
+    gap: 10px;
 }
 
-#like {
-    font-size: 1.5em;
-}
-
-#button-container {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-around;
-    align-items: center;
-    padding-top: 1em;
-    color: rgb(183, 192, 194)
-
-}
-
-.button {
-    font-size: 1.5em;
+.playlist-select {
+    background: var(--color-surface);
+    color: var(--color-text-primary);
+    border: 1px solid var(--color-text-secondary);
+    padding: 8px 12px;
+    border-radius: 4px;
     cursor: pointer;
-}
-
-.button-navigate {
-    font-size: 3em;
-}
-
-.button-biggest {
-    font-size: 4em;
-}
-
-#cover {
+    font-size: 1em;
     width: 100%;
-    max-width: 450px; /* Imagem não fica maior que 450px */
-    border-radius: 3px;
+    transition: all var(--transition-default);
+}
+
+.playlist-select:hover {
+    border-color: var(--color-text-primary);
+}
+
+.playlist-info {
+    display: flex;
+    justify-content: space-between;
+    color: var(--color-text-secondary);
+    font-size: 0.8em;
+}
+
+/* ============= CABEÇALHO ============= */
+.player-header {
+    margin-bottom: 10px;
+}
+
+.playlist-title {
+    font-size: 1.2em;
+    color: var(--color-text-primary);
+}
+
+/* ============= CAPA DO ÁLBUM ============= */
+.album-cover {
+    width: 100%;
+    height: auto;
+    aspect-ratio: 1;
+    object-fit: cover;
+    border-radius: 8px;
+    box-shadow: var(--shadow-elevation);
+    margin: 0 auto;
     display: block;
-    margin: 0 auto; /* Garante que a imagem fique centralizada*/
+    transition: transform var(--transition-default);
 }
 
-#playlist-title {
-    font-size: 2em; /* Garante que o título tenha tamanho adequado */    
+.album-cover.changing {
+    transform: scale(0.95);
+}
+
+.album-info-container {
     text-align: center;
-    margin: 1em 0;
+    margin: 10px 0;
 }
 
-#song-name {
-    font-size: 1.5em;
-    font-weight: bolder;
+.album-info {
+    color: var(--color-text-secondary);
+    font-size: 0.9em;
+    font-style: italic;
 }
 
-.light-color {
-    color: rgb(139,153,156)
+/* Ajuste da animação da capa para incluir as informações do álbum */
+.album-info-container {
+    opacity: 1;
+    transition: opacity var(--transition-default);
 }
 
-#progress-bar {
-    background-color: rgb(139,153,156);
-    height: 3px;
-    width: 100%;
-    border-radius: 15px;
-    cursor: pointer;
+.changing ~ .album-info-container {
+    opacity: 0;
 }
 
-#current-progress {
-    --progress: 0%;
-    height: inherit;
-    width: var(--progress);
-    background-color: white;
-    border-radius: inherit;
-}
-
-#progress-container {
-    cursor: pointer;
-}
-
-.button-active {
-    color: rgb(5, 236, 75);
-}
-
-#time-box {
+/* ============= INFORMAÇÕES DA MÚSICA ============= */
+.track-info {
     display: flex;
-    flex-direction: row;
     justify-content: space-between;
-    color: rgb(139,153,156);
-    font-size: smaller;
-    margin-top: 0.5em;
+    align-items: center;
+    padding: 0 5px;
 }
 
-/* Responsividade para telas menores (tablets e celulares) */
+.track-text {
+    text-align: left;
+}
+
+.track-title {
+    font-size: clamp(0.9em, 2.5vw, 1.1em);
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.track-artist {
+    font-size: clamp(0.8em, 2vw, 0.9em);
+    color: var(--color-text-secondary);
+}
+
+/* ============= CONTROLES DE PROGRESSO ============= */
+.progress-area {
+    width: 100%;
+    padding: 5px 0;
+}
+
+.progress-bar {
+    background: var(--color-progress-bg);
+    height: 4px;
+    border-radius: 2px;
+    cursor: pointer;
+    position: relative;
+}
+
+.progress-current {
+    background: var(--color-primary);
+    height: 100%;
+    border-radius: 2px;
+    width: 0%;
+    transition: width var(--transition-quick) linear;
+}
+
+.time-display {
+    display: flex;
+    justify-content: space-between;
+    font-size: clamp(0.6em, 1.5vw, 0.7em);
+    color: var(--color-text-secondary);
+    margin-top: 5px;
+}
+
+/* ============= BOTÕES DE CONTROLE ============= */
+.control-buttons {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: clamp(8px, 2vw, 20px);
+}
+
+.button-control {
+    background: transparent;
+    border: none;
+    color: var(--color-text-secondary);
+    cursor: pointer;
+    font-size: clamp(0.8em, 3vw, 1.1em);
+    padding: 5px;
+    transition: all var(--transition-default);
+}
+
+.button-play {
+    background: transparent;
+    border: none;
+    color: var(--color-text-primary);
+    cursor: pointer;
+    padding: 5px;
+    font-size: clamp(1.4em, 4vw, 2em);
+    transition: all var(--transition-default);
+}
+
+.button-like {
+    background: transparent;
+    border: none;
+    color: var(--color-text-secondary);
+    cursor: pointer;
+    padding: 5px;
+    font-size: 1.2em;
+    transition: all var(--transition-default);
+}
+
+/* ============= CONTROLE DE VOLUME ============= */
+.volume-control {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    justify-content: flex-end;
+    padding: 5px 10px;
+}
+
+.volume-control input[type="range"] {
+    width: 100px;
+    height: 4px;
+    -webkit-appearance: none;
+    background: var(--color-progress-bg);
+    border-radius: 2px;
+    cursor: pointer;
+    transition: width var(--transition-default);
+}
+
+.volume-control input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 12px;
+    height: 12px;
+    background: var(--color-text-primary);
+    border-radius: 50%;
+}
+
+.volume-control:hover input[type="range"] {
+    width: 120px;
+}
+
+.volume-control i {
+    color: var(--color-text-secondary);
+    cursor: pointer;
+    transition: color var(--transition-default);
+}
+
+/* ============= ESTADOS ATIVOS ============= */
+.button-control.active,
+.button-like.active i {
+    color: var(--color-primary);
+}
+
+/* ============= HOVER STATES ============= */
+.button-control:hover,
+.button-play:hover,
+.button-like:hover,
+.volume-control i:hover {
+    color: var(--color-text-primary);
+    transform: scale(1.1);
+}
+
+/* ============= MEDIA QUERIES ============= */
+/* Telas grandes */
+@media (min-width: 1024px) {
+    .music-player {
+        --player-width: 420px;
+    }
+
+    .music-player:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4);
+    }
+}
+
+/* Telas médias */
 @media (max-width: 768px) {
-    #below-cover {
-        flex-direction: column;
-        align-items: center;
-        text-align: center;
+    .music-player {
+        padding: 15px;
+    }
+}
+
+/* Telas pequenas */
+@media (max-width: 480px) {
+    .music-player {
+        padding: 10px;
     }
 
-    #like {
-        margin-top: 10px;
-    }
-
-    #button-container {
-        flex-wrap: wrap;
+    .control-buttons {
         gap: 10px;
     }
 
-    .button {
-        font-size: 1.2em;
-    }
-
-    .button-navigate {
-        font-size: 2em;
-    }
-
-    .button-biggest {
-        font-size: 2.5em;
-    }
-
-    #cover {
-        max-width: 200px; /* Diminui a imagem ainda mais */
-        margin: 0 auto; /*Garante que a imagem fique centralizada*/
-    }
-
-    #playlist-title {
-        font-size: 1.3em;
+    .volume-control input[type="range"] {
+        width: 60px;
     }
 }
 
-@media (max-width: 480px) {
-    
-    #playlist-title {
-        font-size: 1.2em;
+/* Altura pequena */
+@media (max-height: 600px) {
+    .music-player {
+        gap: 10px;
     }
 
-    #cover {
-        max-width: 200px; /* Diminui o tamanho da capa para caber melhor */
-        margin: 0 auto; /*Garante que a imagem fique centralizada*/        
-    }
-
-    .button {
-        font-size: 1em;
-    }
-
-    .button-navigate {
-        font-size: 1.8em;
-    }
-
-    .button-biggest {
-        font-size: 2.2em;
-    }
-
-    #progress-container {
-        max-width: 300px;
+    .album-cover {
+        width: min(200px, 30vh);
+        height: min(200px, 30vh);
     }
 }
 
-@media (max-width: 312px) {
-    body {
-        padding: 10px; /* Adicionando um pequeno padding para não ficar colado nas bordas */
+/* Suporte para telas de alta densidade */
+@media (-webkit-min-device-pixel-ratio: 2), 
+       (min-resolution: 192dpi) {
+    .album-cover {
+        image-rendering: -webkit-optimize-contrast;
     }
 
-    #below-cover {
-        flex-direction: column;
-        align-items: center;
-        margin: 2em 0 1em 0;
-    }
-
-    #like {
-        font-size: 1.2em;
-        margin-top: 5px;
-    }
-
-    #button-container {
-        flex-direction: row;
-        align-items: center;
-        gap: 8px; /* Espaçamento maior entre os botões */
-    }
-
-    .button {
-        font-size: 1.1em;
-        padding: 5px;
-    }
-
-    .button-navigate {
-        font-size: 2em;
-    }
-
-    .button-biggest {
-        font-size: 2.5em;
-    }
-
-    #cover {
-        max-width: 180px; /* Diminui o tamanho da capa para caber melhor */
-        margin-bottom: 1em; /* Adiciona um pouco de espaço abaixo da imagem */
-        margin: 0 auto;/*Garante que a imagem fique centralizada*/
-    }
-
-    #playlist-title {
-        font-size: 1.1em; /* Ajusta o tamanho da fonte para caber melhor */
-        margin: 0.5em 0;
-    }
-
-    #song-name {
-        font-size: 1.2em;
-    }
-
-    #progress-bar {
-        height: 2px; /* Diminui a altura da barra de progresso */
-    }
-
-    #current-progress {
-        height: inherit;
-    }
-
-    #time-box {
-        font-size: 0.9em;
-        margin-top: 0.5em;
-    }
-
-    .light-color {
-        font-size: 0.9em;
-    }
-
-    #playlist-title,
-    #song-name {
-        text-align: center; /* Centraliza o título da playlist e o nome da música */
+    .music-player {
+        backdrop-filter: blur(10px);
     }
 }
+
+
+/*Principais melhorias:
+
+Variáveis CSS: Todas as cores, tamanhos e valores importantes agora são variáveis
+Organização por Seções: Código dividido em seções lógicas com comentários claros
+Reutilização: Propriedades comuns agrupadas em classes base
+Consistência: Uso consistente de variáveis e valores
+Manutenibilidade: Fácil de modificar valores globalmente
+Performance: Redução de duplicação de código
+Escalabilidade: Mais fácil de adicionar novos estilos
+Responsividade: Media queries mais organizadas*/

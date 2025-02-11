@@ -1,198 +1,442 @@
-const songName = document.getElementById('song-name');
-const bandName = document.getElementById('band-name');
-const song = document.getElementById('audio');
-const cover = document.getElementById('cover');
-const play = document.getElementById('play');
-const previous = document.getElementById('previous');
-const likeButton = document.getElementById('like');
-const next = document.getElementById('next');
-const currentprogress = document.getElementById('current-progress');
-const progressContainer = document.getElementById('progress-container');
-const shuffleButton = document.getElementById('shuffle');
-const repeatButton = document.getElementById('repeat');
-const songTime = document.getElementById('song-time');
-const totalTime = document.getElementById('total-time');
+// ============= IMPORTAÇÕES =============
+import { playlists, getPlaylistById, getPlaylistTotalDuration, formatDuration, getAlbumInfo } from './playlists/index.js';
 
-const illbethereforyou = {
-    songName : 'I´ll Be There For You',
-    artist:'Bon Jovi',
-    file: 'ill_be_there_for_you'
+// ============= ELEMENTOS DO DOM =============
+const elements = {
+    audio: document.getElementById('audio'),
+    cover: document.getElementById('cover'),
+    songName: document.getElementById('song-name'),
+    bandName: document.getElementById('band-name'),
+    albumInfo: document.getElementById('album-info'),
+    playlistTitle: document.querySelector('.playlist-title'),
+    playlistSelect: document.getElementById('playlist-select'),
+    playlistSongCount: document.getElementById('playlist-song-count'),
+    playlistDuration: document.getElementById('playlist-duration'),
+    progress: {
+        current: document.getElementById('current-progress'),
+        bar: document.getElementById('progress-bar'),
+        time: document.getElementById('song-time'),
+        total: document.getElementById('total-time')
+    },
+    buttons: {
+        play: document.getElementById('play'),
+        prev: document.getElementById('previous'),
+        next: document.getElementById('next'),
+        shuffle: document.getElementById('shuffle'),
+        repeat: document.getElementById('repeat'),
+        like: document.getElementById('like')
+    },
+    volume: {
+        control: document.querySelector('.volume-control'),
+        button: document.querySelector('.volume-control i'),
+        slider: document.querySelector('.volume-control input')
+    }
 };
 
-const bedofroses = {
-    songName : 'Bed Of Roses',
-    artist : 'Bon Jovi',
-    file : 'bed_of_roses'
+// ============= ESTADO DO PLAYER =============
+const playerState = {
+    currentPlaylistId: localStorage.getItem('currentPlaylistId') || 'bonJovi',
+    currentTrackIndex: parseInt(localStorage.getItem('currentTrackIndex')) || 0,
+    currentTime: parseFloat(localStorage.getItem('currentTime')) || 0,
+    isPlaying: false,
+    isShuffled: JSON.parse(localStorage.getItem('shuffleState')) || false,
+    isRepeating: JSON.parse(localStorage.getItem('repeatState')) || false,
+    likedTracks: new Set(JSON.parse(localStorage.getItem('likedTracks')) || []),
+    volume: parseFloat(localStorage.getItem('volume')) || 1,
+    lastVolume: 1,
+    isChangingTrack: false,
+    playHistory: []
 };
 
-const ItsMyLife = {
-    songName : 'I´ts My Life',
-    artist : 'Bon Jovi',
-    file: 'its_my_life'
-};
-
-let isPlaying = false;
-let isShuffled = false;
-let repeatOn = false;
-const originalPlaylist = JSON.parse(localStorage.getItem ('playlist')) ?? [
-    illbethereforyou,
-    bedofroses,
-    ItsMyLife];
-let sortedPlaylist = [...originalPlaylist];
-let index = 0;
-
-function playSong() {
-    play.querySelector('.bi').classList.remove('bi-play-circle-fill');
-    play.querySelector('.bi').classList.add('bi-pause-circle-fill');
-    song.play();
-    isPlaying = true;
+// ============= FUNÇÕES DE PLAYLIST E ÁLBUM =============
+function getCurrentPlaylist() {
+    return getPlaylistById(playerState.currentPlaylistId);
 }
 
-function pauseSong() {
-    play.querySelector('.bi').classList.add('bi-play-circle-fill');
-    play.querySelector('.bi').classList.remove('bi-pause-circle-fill');
-    song.pause();
-    isPlaying = false;
+function getCurrentTrack() {
+    const playlist = getCurrentPlaylist();
+    return playlist.songs[playerState.currentTrackIndex];
 }
 
-function playPauseDecider(){
-    if(isPlaying === true){
-        pauseSong();
-    } else {
-        playSong();
+function getCurrentAlbumInfo() {
+    const track = getCurrentTrack();
+    const playlist = getCurrentPlaylist();
+    return getAlbumInfo(playlist, track.albumId);
+}
+
+function updatePlaylistInfo() {
+    const playlist = getCurrentPlaylist();
+    elements.playlistTitle.textContent = playlist.name;
+    elements.playlistSongCount.textContent = `${playlist.songs.length} músicas`;
+    elements.playlistDuration.textContent = formatDuration(getPlaylistTotalDuration(playlist));
+}
+
+// ============= FUNÇÕES DO PLAYER =============
+async function loadTrack() {
+    const track = getCurrentTrack();
+    const playlist = getCurrentPlaylist();
+    const album = getCurrentAlbumInfo();
+    
+    try {
+        await elements.audio.pause();
+        
+        // Zera o progresso antes de carregar nova música
+        elements.progress.current.style.width = '0%';
+        elements.progress.time.textContent = '00:00';
+        elements.progress.total.textContent = '00:00';
+        
+        elements.cover.classList.add('changing');
+        elements.cover.src = `images/${playlist.coverFolder}/${album.cover}.jpg`;
+        elements.audio.src = `songs/${playlist.songsFolder}/${track.file}.mp3`;
+        elements.songName.textContent = track.title;
+        elements.bandName.textContent = track.artist;
+        
+        if (elements.albumInfo) {
+            elements.albumInfo.textContent = `${album.name} (${album.year})`;
+        }
+        
+        elements.audio.volume = playerState.volume;
+        
+        await elements.audio.load();
+        
+        // Restaura o ponto onde a música parou (apenas se não estiver mudando de música)
+        if (playerState.currentTime > 0 && !playerState.isChangingTrack) {
+            elements.audio.currentTime = playerState.currentTime;
+        } else {
+            playerState.currentTime = 0;
+            elements.audio.currentTime = 0;
+        }
+
+        updateControls();
+        
+        setTimeout(() => {
+            elements.cover.classList.remove('changing');
+        }, 300);
+
+        // Adiciona à história de reprodução
+        if (!playerState.isChangingTrack) {
+            playerState.playHistory.push({
+                playlistId: playerState.currentPlaylistId,
+                trackIndex: playerState.currentTrackIndex
+            });
+            
+            if (playerState.playHistory.length > 50) {
+                playerState.playHistory.shift();
+            }
+        }
+
+    } catch (error) {
+        console.log('Erro ao carregar música:', error);
     }
 }
 
-function likeButtonRender() {
-    if (sortedPlaylist[index].liked === true) {
-        likeButton.querySelector('.bi').classList.remove('bi-heart');
-        likeButton.querySelector('.bi').classList.add('bi-heart-fill');
-        likeButton.classList.add('button-active');
-    } else {
-        likeButton.querySelector('.bi').classList.add('bi-heart');
-        likeButton.querySelector('.bi').classList.remove('bi-heart-fill');
-        likeButton.classList.remove('button-active');  
+async function playTrack() {
+    try {
+        await elements.audio.play();
+        playerState.isPlaying = true;
+        updateControls();
+    } catch (error) {
+        console.log('Erro ao reproduzir:', error);
+        playerState.isPlaying = false;
+        updateControls();
     }
 }
 
-function initializeSong() {
-    cover.src = `images/${sortedPlaylist[index].file}.jpg`;
-    song.src = `songs/${sortedPlaylist[index].file}.mp3`;
-    songName.innerText = sortedPlaylist[index].songName;
-    bandName.innerText = sortedPlaylist[index].artist;
-    likeButtonRender();
+function pauseTrack() {
+    elements.audio.pause();
+    playerState.isPlaying = false;
+    updateControls();
 }
 
-function previousSong() {
-    if(index === 0) {
-     index = sortedPlaylist.length -1;
+function nextTrack() {
+    const playlist = getCurrentPlaylist();
+    
+    playerState.isChangingTrack = true;
+    
+    if (playerState.isShuffled) {
+        let nextIndex;
+        do {
+            nextIndex = Math.floor(Math.random() * playlist.songs.length);
+        } while (nextIndex === playerState.currentTrackIndex && playlist.songs.length > 1);
+        playerState.currentTrackIndex = nextIndex;
     } else {
-      index -= 1;
+        playerState.currentTrackIndex = (playerState.currentTrackIndex + 1) % playlist.songs.length;
     }
-    initializeSong();
-    playSong();
+    
+    loadTrack().then(() => {
+        if (playerState.isPlaying) playTrack();
+        playerState.isChangingTrack = false;
+    });
+    saveState();
 }
 
-function nextSong(){
-    if (index === sortedPlaylist.length -1) {
-      index = 0;
+function previousTrack() {
+    const playlist = getCurrentPlaylist();
+    
+    if (elements.audio.currentTime > 3) {
+        elements.audio.currentTime = 0;
+        playerState.currentTime = 0;
     } else {
-      index += 1;
-    } 
-    initializeSong();
-    playSong();
+        playerState.isChangingTrack = true;
+        playerState.currentTrackIndex = (playerState.currentTrackIndex - 1 + playlist.songs.length) % playlist.songs.length;
+        loadTrack().then(() => {
+            if (playerState.isPlaying) playTrack();
+            playerState.isChangingTrack = false;
+        });
+    }
+    saveState();
+}
+
+// ============= CONTROLES DE INTERFACE =============
+function updateControls() {
+    // Play/Pause
+    const playIcon = elements.buttons.play.querySelector('i');
+    playIcon.classList.remove('bi-play-circle-fill', 'bi-pause-circle-fill');
+    playIcon.classList.add(playerState.isPlaying ? 'bi-pause-circle-fill' : 'bi-play-circle-fill');
+    
+    // Shuffle
+    elements.buttons.shuffle.classList.toggle('active', playerState.isShuffled);
+    
+    // Repeat
+    elements.buttons.repeat.classList.toggle('active', playerState.isRepeating);
+    
+    // Like
+    const trackId = `${playerState.currentPlaylistId}-${playerState.currentTrackIndex}`;
+    elements.buttons.like.classList.toggle('active', playerState.likedTracks.has(trackId));
+    
+    // Volume
+    updateVolumeIcon(playerState.volume);
 }
 
 function updateProgress() {
-   const barWidth = (song.currentTime / song.duration) * 100;
-   currentprogress.style.setProperty('--progress', `${barWidth}%`);
-   songTime.innerText = toHHMMSS(song.currentTime);
+    const duration = elements.audio.duration;
+    const currentTime = elements.audio.currentTime;
+    const progress = (currentTime / duration) * 100;
+    
+    elements.progress.current.style.width = `${progress}%`;
+    elements.progress.time.textContent = formatTime(currentTime);
+    if (duration) elements.progress.total.textContent = formatTime(duration);
 }
 
-function jumpTo(event) {
-   const width = progressContainer.clientWidth;
-   const clickposition = event.offsetX;
-   const jumpToTime = (clickposition / width) * song.duration;
-   song.currentTime = jumpToTime;
+function formatTime(time) {
+    const minutes = Math.floor(time / 60);
+    const seconds = Math.floor(time % 60);
+    return `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
 }
 
-function shuffleArray(preShuffleArray) {
-    const size = preShuffleArray.length;
-    let currentIndex = size -1;
-    while(currentIndex > 0) {
-       let randomIndex = Math.floor(Math.random()* size);
-       let aux = preShuffleArray[currentIndex];
-       preShuffleArray[currentIndex] = preShuffleArray[randomIndex];
-       preShuffleArray[randomIndex] = aux;
-       currentIndex -= 1;
-    }
-}
-
-function shuffleButtonClicked() {
-    if (isShuffled === false){
-       isShuffled = true;
-       shuffleArray (sortedPlaylist);
-       shuffleButton.classList.add('button-active');
+function resetProgress() {
+    elements.progress.current.style.width = '0%';
+    elements.progress.time.textContent = '00:00';
+    if (elements.audio.duration) {
+        elements.progress.total.textContent = formatTime(elements.audio.duration);
     } else {
-       isShuffled = false;
-       shuffleArray (...originalPlaylist);
-       shuffleButton.classList.remove('button-active');
+        elements.progress.total.textContent = '00:00';
     }
 }
 
-function repeatButtonClicked() {
-    if(repeatOn === false) {
-        repeatOn = true;
-        repeatButton.classList.add('button-active');
-    }
-    else {
-        repeatOn = false;
-    repeatButton.classList.remove('button-active');
-    }
-}
-
-function nextOrRepeat(){
-    if (repeatOn === false){
-        nextSong();
-    }
-    else {
-        playSong();
-    }
-}
-
-function toHHMMSS(originalNumber) {
-    let hours = Math.floor(originalNumber / 3600);
-    let min = Math.floor((originalNumber - hours * 3600) / 60);
-    let secs = Math.floor(originalNumber - hours* 3600 - min* 60);
-
-    return `${hours.toString().padStart(2,'0')}:${min
-      .toString()
-      .padStart(2,'0')}:${secs.toString().padStart(2,'0')}`;
-}
-
-function updateTotalTime() {
-  totalTime.innerText = toHHMMSS(song.duration);
-}
-
-function likeButtonClicked() {
-    if(sortedPlaylist[index].liked === false) {
-      sortedPlaylist[index].liked = true;
+// ============= CONTROLES DE VOLUME =============
+function updateVolumeIcon(value) {
+    const icon = elements.volume.button;
+    icon.classList.remove('bi-volume-up', 'bi-volume-down', 'bi-volume-mute');
+    
+    if (value === 0) {
+        icon.classList.add('bi-volume-mute');
+    } else if (value < 0.5) {
+        icon.classList.add('bi-volume-down');
     } else {
-      sortedPlaylist[index].liked = false;
+        icon.classList.add('bi-volume-up');
     }
-    likeButtonRender();
-    localStorage.setItem('playlist', JSON.stringify(originalPlaylist));
 }
 
-initializeSong();
+function updateVolume(value) {
+    playerState.volume = value;
+    elements.audio.volume = value;
+    updateVolumeIcon(value);
+    saveState();
+}
 
-play.addEventListener('click', playPauseDecider);
-previous.addEventListener('click', previousSong);
-next.addEventListener('click', nextSong);
-song.addEventListener('timeupdate', updateProgress);
-song.addEventListener('ended', nextOrRepeat);
-song.addEventListener('loadedmetadata', updateTotalTime);
-progressContainer.addEventListener('click', jumpTo);
-shuffleButton.addEventListener('click', shuffleButtonClicked);
-repeatButton.addEventListener('click', repeatButtonClicked);
-likeButton.addEventListener('click', likeButtonClicked);
+// ============= CONTROLES DE ESTADO =============
+function toggleShuffle() {
+    playerState.isShuffled = !playerState.isShuffled;
+    updateControls();
+    saveState();
+}
+
+function toggleRepeat() {
+    playerState.isRepeating = !playerState.isRepeating;
+    updateControls();
+    saveState();
+}
+
+function toggleLike() {
+    const trackId = `${playerState.currentPlaylistId}-${playerState.currentTrackIndex}`;
+    if (playerState.likedTracks.has(trackId)) {
+        playerState.likedTracks.delete(trackId);
+    } else {
+        playerState.likedTracks.add(trackId);
+    }
+    updateControls();
+    saveState();
+}
+
+function saveState() {
+    const state = {
+        currentPlaylistId: playerState.currentPlaylistId,
+        currentTrackIndex: playerState.currentTrackIndex,
+        currentTime: elements.audio.currentTime,
+        isShuffled: playerState.isShuffled,
+        isRepeating: playerState.isRepeating,
+        likedTracks: Array.from(playerState.likedTracks),
+        volume: playerState.volume
+    };
+    localStorage.setItem('playerState', JSON.stringify(state));
+}
+
+function restoreState() {
+    try {
+        const savedState = JSON.parse(localStorage.getItem('playerState'));
+        if (savedState) {
+            playerState.currentPlaylistId = savedState.currentPlaylistId;
+            playerState.currentTrackIndex = savedState.currentTrackIndex;
+            playerState.currentTime = savedState.currentTime;
+            playerState.isShuffled = savedState.isShuffled;
+            playerState.isRepeating = savedState.isRepeating;
+            playerState.likedTracks = new Set(savedState.likedTracks);
+            playerState.volume = savedState.volume;
+        }
+    } catch (e) {
+        console.log('Erro ao restaurar estado:', e);
+    }
+}
+
+// ============= EVENT LISTENERS =============
+function initializeEventListeners() {
+    // Controles principais
+    elements.buttons.play.addEventListener('click', () => {
+        if (playerState.isPlaying) {
+            pauseTrack();
+        } else {
+            playTrack();
+        }
+    });
+    
+    elements.buttons.next.addEventListener('click', nextTrack);
+    elements.buttons.prev.addEventListener('click', previousTrack);
+    elements.buttons.shuffle.addEventListener('click', toggleShuffle);
+    elements.buttons.repeat.addEventListener('click', toggleRepeat);
+    elements.buttons.like.addEventListener('click', toggleLike);
+    
+    // Progresso
+    elements.progress.bar.addEventListener('click', (e) => {
+        const width = elements.progress.bar.clientWidth;
+        const clickPosition = e.offsetX;
+        const jumpToTime = (clickPosition / width) * elements.audio.duration;
+        elements.audio.currentTime = jumpToTime;
+        playerState.currentTime = jumpToTime;
+        saveState();
+    });
+    
+    // Volume
+    elements.volume.slider.addEventListener('input', (e) => updateVolume(e.target.value));
+    elements.volume.button.addEventListener('click', () => {
+        if (elements.audio.volume > 0) {
+            playerState.lastVolume = elements.audio.volume;
+            updateVolume(0);
+            elements.volume.slider.value = 0;
+        } else {
+            updateVolume(playerState.lastVolume || 1);
+            elements.volume.slider.value = playerState.lastVolume || 1;
+        }
+    });
+    
+    // Áudio
+    elements.audio.addEventListener('timeupdate', () => {
+        updateProgress();
+        if (!playerState.isChangingTrack) {
+            playerState.currentTime = elements.audio.currentTime;
+            saveState();
+        }
+    });
+    
+    elements.audio.addEventListener('ended', () => {
+        if (playerState.isRepeating) {
+            elements.audio.currentTime = 0;
+            playTrack();
+        } else {
+            nextTrack();
+        }
+    });
+    
+    // Playlist
+    elements.playlistSelect.addEventListener('change', (e) => {
+        playerState.currentPlaylistId = e.target.value;
+        playerState.currentTrackIndex = 0;
+        playerState.currentTime = 0;
+        playerState.isChangingTrack = true;
+        updatePlaylistInfo();
+        loadTrack().then(() => {
+            if (playerState.isPlaying) playTrack();
+            playerState.isChangingTrack = false;
+        });
+        saveState();
+    });
+    
+    // Atalhos de teclado
+    document.addEventListener('keydown', (e) => {
+        if (e.code === 'Space') {
+            e.preventDefault();
+            playerState.isPlaying ? pauseTrack() : playTrack();
+        } else if (e.code === 'ArrowRight') {
+            nextTrack();
+        } else if (e.code === 'ArrowLeft') {
+            previousTrack();
+        } else if (e.code === 'ArrowUp') {
+            const newVolume = Math.min(1, playerState.volume + 0.1);
+            updateVolume(newVolume);
+            elements.volume.slider.value = newVolume;
+        } else if (e.code === 'ArrowDown') {
+            const newVolume = Math.max(0, playerState.volume - 0.1);
+            updateVolume(newVolume);
+            elements.volume.slider.value = newVolume;
+        }
+    });
+
+    // Salvar estado ao fechar/recarregar página
+    window.addEventListener('beforeunload', () => {
+        if (!playerState.isChangingTrack) {
+            playerState.currentTime = elements.audio.currentTime;
+            saveState();
+        }
+    });
+}
+
+// ============= INICIALIZAÇÃO =============
+function initializePlayer() {
+    // Restaurar estado salvo
+    restoreState();
+    
+    // Restaurar volume
+    elements.volume.slider.value = playerState.volume;
+    elements.audio.volume = playerState.volume;
+    
+    // Restaurar playlist selecionada
+    elements.playlistSelect.value = playerState.currentPlaylistId;
+    
+    // Inicializar informações da playlist
+    updatePlaylistInfo();
+    
+    // Configurar eventos
+    initializeEventListeners();
+    
+    // Carregar música
+    loadTrack().then(() => {
+        // Restaurar posição da música
+        if (playerState.currentTime > 0) {
+            elements.audio.currentTime = playerState.currentTime;
+        }
+        updateControls();
+    });
+}
+
+// Iniciar o player
+initializePlayer();

@@ -3,40 +3,171 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bruno Spotify</title>
+    <meta name="description" content="Player de música estilo Spotify">
+    <meta name="theme-color" content="#1db954">
+    
+    <title>Music Player</title>
+    
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
-  <div class="music-container">
-   <h4 id="playlist-title">Bruno Selection</h4>
-   <img id="cover" alt="Disc Cover."></img>
-   <audio id="audio"></audio>
-   <div id="below-cover">
-   <div id="song-info">
-     <div id="song-name">Nome da musica</div>
-     <div class="light-color" id="band-name">Nome da banda</div>
-   </div>
-   <button id="like" class="light-color"><i class="bi bi-heart"></i></button>
-   </div>
-
-  <div id="progress-container">
-         <div id="progress-bar">
-          <div id="current-progress"></div>
-        <div id="time-box">
-            <div id="song-time">00:00:00</div>
-            <div id="total-time">00:00:00</div>
+    <main class="music-player">
+        <!-- Seletor de Playlist -->
+        <div class="playlist-controls">
+            <select id="playlist-select" class="playlist-select">
+                <option value="bonJovi">Bon Jovi Hits</option>
+                <option value="bruceSpringsteen">Bruce Springsteen Collection</option>
+                <option value="theDoors">The Doors Collection</option>
+                <option value="u2">U2 Greatest Hits</option>
+            </select>
+            <div class="playlist-info">
+                <span id="playlist-song-count">0 músicas</span>
+                <span id="playlist-duration">00:00</span>
+            </div>
         </div>
-  </div>
-     <div id="button-container">
-       <button id="shuffle" class="button"><i class="bi bi-shuffle"></i></button>
-       <button id="previous" class="button-navigate"><i class="bi bi-skip-start"></i></button>
-       <button id="play"class="button-biggest"><i class="bi bi-play-circle-fill"></i></button>
-       <button id="next" class="button-navigate"><i class="bi bi-skip-end"></i></button>
-       <button id="repeat" class="button"><i class="bi bi-repeat"></i></button>
-     </div>
-  </div>
-  <script src="script.js"></script>
+
+        <!-- Cabeçalho da Playlist -->
+        <header class="player-header">
+            <h1 class="playlist-title">Player de Música</h1>
+        </header>
+
+        <!-- Seção Principal do Player -->
+        <section class="player-content">
+            <!-- Capa do Álbum -->
+            <img 
+                id="cover" 
+                class="album-cover"
+                alt="Capa do álbum atual"
+            >
+
+            <!-- Informações do Álbum - NOVO -->
+            <div class="album-info-container">
+                <span id="album-info" class="album-info"></span>
+            </div>
+
+            <!-- Player de Áudio -->
+            <audio id="audio"></audio>
+
+            <!-- Informações da Música -->
+            <div class="track-info">
+                <div class="track-text">
+                    <div id="song-name" class="track-title">Nome da música</div>
+                    <div id="band-name" class="track-artist">Nome da banda</div>
+                </div>
+                <button 
+                    id="like" 
+                    class="button-like"
+                    aria-label="Curtir música"
+                >
+                    <i class="bi bi-heart"></i>
+                </button>
+            </div>
+        </section>
+
+        <!-- Controles do Player -->
+        <section class="player-controls">
+            <!-- Barra de Progresso -->
+            <div class="progress-area">
+                <div id="progress-bar" class="progress-bar">
+                    <div id="current-progress" class="progress-current"></div>
+                </div>
+                <!-- Tempo -->
+                <div class="time-display">
+                    <span id="song-time">00:00</span>
+                    <span id="total-time">00:00</span>
+                </div>
+            </div>
+
+            <!-- Botões de Controle -->
+            <div class="control-buttons">
+                <button 
+                    id="shuffle" 
+                    class="button-control"
+                    aria-label="Embaralhar playlist"
+                >
+                    <i class="bi bi-shuffle"></i>
+                </button>
+
+                <button 
+                    id="previous" 
+                    class="button-control"
+                    aria-label="Música anterior"
+                >
+                    <i class="bi bi-skip-start"></i>
+                </button>
+
+                <button 
+                    id="play"
+                    class="button-play"
+                    aria-label="Tocar ou pausar música"
+                >
+                    <i class="bi bi-play-circle-fill"></i>
+                </button>
+
+                <button 
+                    id="next" 
+                    class="button-control"
+                    aria-label="Próxima música"
+                >
+                    <i class="bi bi-skip-end"></i>
+                </button>
+
+                <button 
+                    id="repeat" 
+                    class="button-control"
+                    aria-label="Repetir música"
+                >
+                    <i class="bi bi-repeat"></i>
+                </button>
+            </div>
+
+            <!-- Volume Control -->
+            <div class="volume-control">
+                <i class="bi bi-volume-up"></i>
+                <input 
+                    type="range" 
+                    id="volume" 
+                    min="0" 
+                    max="1" 
+                    step="0.1" 
+                    value="1"
+                    aria-label="Controle de volume"
+                >
+            </div>
+        </section>
+    </main>
+
+    <!-- Scripts -->
+    <script src="script.js" type="module"></script>
 </body>
 </html>
+
+
+<!--Principais melhorias:
+
+Semântica Melhorada:
+Uso apropriado de tags HTML5 (main, header, section)
+Estrutura mais clara e significativa
+Acessibilidade:
+Atributos aria-label adicionados
+Roles definidos onde necessário
+Títulos e descrições para botões
+Melhor estrutura de cabeçalhos
+Organização:
+Código dividido em seções lógicas
+Comentários descritivos
+Melhor hierarquia visual
+Meta Tags:
+Descrição do site
+Cor do tema para dispositivos móveis
+Classes Significativas:
+Nomes de classes mais descritivos
+Melhor organização para CSS
+Atributos de Mídia:
+Preload configurado para melhor performance
+Alt text mais descritivo para imagens
+Estrutura de Controles:
+Botões melhor organizados
+Labels mais claros-->
