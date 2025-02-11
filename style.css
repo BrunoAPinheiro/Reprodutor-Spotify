@@ -154,12 +154,45 @@ body {
     transition: opacity var(--transition-default);
 }
 
+<<<<<<< HEAD
 .changing ~ .album-info-container {
     opacity: 0;
 }
 
 /* ============= INFORMAÇÕES DA MÚSICA ============= */
 .track-info {
+=======
+#progress-bar {
+    background-color: rgb(139,153,156);
+    height: 5px;
+    width: 100%;
+    border-radius: 15px;
+    cursor: pointer;
+}
+
+
+#current-progress {
+    --progress: 0%;
+    height: inherit;
+    width: var(--progress);
+    background-color: white;
+    border-radius: inherit;
+}
+
+#progress-container {
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+}
+
+.button-active {
+    color: rgb(5, 236, 75);
+}
+
+#time-box {
+>>>>>>> 893b99830fd067997b27ea0edcf496756d1e7336
     display: flex;
     justify-content: space-between;
     align-items: center;
