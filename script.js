@@ -257,6 +257,10 @@ function updateVolume(value) {
     playerState.volume = value;
     elements.audio.volume = value;
     updateVolumeIcon(value);
+    
+    // Atualiza a barra de progresso do volume
+    elements.volume.slider.style.setProperty('--volume-percentage', `${value * 100}%`);
+    
     saveState();
 }
 
@@ -432,7 +436,10 @@ function initializePlayer() {
     
     // Configurar eventos
     initializeEventListeners();
-    
+
+    // Inicializar a barra de volume com o valor atual
+    elements.volume.slider.style.backgroundSize = `${playerState.volume * 100}% 100%`;
+
     // Carregar música
     loadTrack().then(() => {
         // Restaurar posição da música

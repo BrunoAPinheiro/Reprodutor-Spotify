@@ -266,35 +266,51 @@ body {
 
 /* ============= CONTROLE DE VOLUME ============= */
 .volume-control {
+    position: relative;
     display: flex;
     align-items: center;
     gap: 8px;
-    justify-content: flex-end;
-    padding: 5px 10px;
 }
 
 .volume-control input[type="range"] {
+    -webkit-appearance: none;
+    appearance: none;
+    position: relative;
     width: 100px;
     height: 4px;
-    -webkit-appearance: none;
-    background: linear-gradient(90deg, 
-        var(--color-primary) 0%, 
-        var(--color-primary) var(--volume-percentage, 50%), 
-        var(--color-progress-bg) var(--volume-percentage, 50%)
-    );
     border-radius: 2px;
-    cursor: pointer;
-    transition: width var(--transition-default);
+    background: #4d4d4d; /* Cor da barra base (cinza) */
+}
+
+.volume-control input[type="range"]::-webkit-slider-runnable-track {
+    -webkit-appearance: none;
+    height: 4px;
 }
 
 .volume-control input[type="range"]::-webkit-slider-thumb {
     -webkit-appearance: none;
-    width: 12px;
     height: 12px;
-    background: var(--color-text-primary);
+    width: 12px;
     border-radius: 50%;
-    box-shadow: 0 0 10px rgba(29, 185, 84, 0.5);
-    transition: transform 0.2s ease;
+    background: #fff;
+    cursor: pointer;
+    margin-top: -4px; /* Centraliza o botão na barra */
+    position: relative;
+    z-index: 2;
+}
+
+.volume-control input[type="range"]::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    height: 100%;
+    background: #1db954; /* Cor verde do Spotify */
+    border-radius: 2px;
+    pointer-events: none;
+}
+
+.volume-control input[type="range"]::before {
+    width: var(--volume-percentage, 100%);
 }
 
 .volume-control input[type="range"]::-webkit-slider-thumb:hover {
