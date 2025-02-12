@@ -53,6 +53,9 @@ body {
     100% { background-position: 0% 50%; }
 }
 
+#playlist-duration{
+    display:none
+}
 /* ============= PLAYER CONTAINER ============= */
 .music-player {
     background: var(--color-surface);

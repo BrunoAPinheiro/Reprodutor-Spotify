@@ -39,7 +39,7 @@ export default {
         streets_of_philadelphia: {
             name: "Streets of Philadelphia",
             year: 1993,
-            cover: "river_cover"
+            cover: "streets_of_philadelphia_cover"
         },
         
          the_river: {
