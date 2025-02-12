@@ -62,7 +62,6 @@ export default {
             file: "atlantic_city",
             albumId: "atlantic_city"
         },
-        
         {
             title: "Badlands",
             artist: "Bruce Springsteen",
