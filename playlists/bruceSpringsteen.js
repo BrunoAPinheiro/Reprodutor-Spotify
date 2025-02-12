@@ -16,7 +16,7 @@ export default {
             year: 1992,
             cover: "better_days_cover"
         },
-        born_in_usa: {
+        burn_in_the_usa: {
             name: "Burn in the U.S.A.",
             year: 1984,
             cover: "burn_in_the_usa_cover"
@@ -133,13 +133,13 @@ export default {
             artist: "Bruce Springsteen",
             file: "murder_incorporated",
             albumId: "greatest_hits"
-        },{
+        },
+        {
             title: "My Hometown",
             artist: "Bruce Springsteen",
             file: "my_hometown",
             albumId: "burn_in_the_usa"
         },
-        
         {
             title: "Secret Garden",
             artist: "Bruce Springsteen",
@@ -157,7 +157,8 @@ export default {
             artist: "Bruce Springsteen",
             file: "the_river",
             albumId: "the_river"
-        },{
+        },
+        {
             title: "This Hard Land",
             artist: "Bruce Springsteen",
             file: "this_hard_land",
