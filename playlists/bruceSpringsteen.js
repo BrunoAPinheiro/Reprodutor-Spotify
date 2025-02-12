@@ -17,9 +17,9 @@ export default {
             cover: "better_days_cover"
         },
         born_in_usa: {
-            name: "Born in the U.S.A.",
+            name: "Burn in the U.S.A.",
             year: 1984,
-            cover: "born_in_the_usa_cover"
+            cover: "burn_in_the_usa_cover"
         },
         darkness: {
             name: "Darkness on the Edge of Town",
@@ -88,10 +88,10 @@ export default {
             albumId: "greatest_hits"
         },
         {
-            title: "Born in the U.S.A.",
+            title: "Burn in the U.S.A.",
             artist: "Bruce Springsteen",
-            file: "born_in_the_usa",
-            albumId: "born_in_the_usa"
+            file: "burn_in_the_usa",
+            albumId: "burn_in_the_usa"
         },
        {
             title: "Brilliant Disguise",
@@ -103,13 +103,13 @@ export default {
             title: "Dancing in the Dark",
             artist: "Bruce Springsteen",
             file: "dancing_in_the_dark",
-            albumId: "born_in_usa"
+            albumId: "burn_in_the_usa"
         },
          {
             title: "Glory Days", 
             artist: "Bruce Springsteen",
             file: "glory_days",
-            albumId: "born_in_the_usa"
+            albumId: "burn_in_the_usa"
         }, 
         { title: "Human Touch",
             artist: "Bruce Springsteen",
@@ -126,7 +126,7 @@ export default {
             title: "I'm on Fire",
             artist: "Bruce Springsteen",
             file: "im_on_fire",
-            albumId: "born_in_the_usa"
+            albumId: "burn_in_the_usa"
         },
         {
             title: "Murder Incorporated",
@@ -137,7 +137,7 @@ export default {
             title: "My Hometown",
             artist: "Bruce Springsteen",
             file: "my_hometown",
-            albumId: "born_in_the_usa"
+            albumId: "burn_in_the_usa"
         },
         
         {
