@@ -19,13 +19,14 @@ export default {
         born_in_usa: {
             name: "Born in the U.S.A.",
             year: 1984,
-            cover: "born_in_usa_cover"
+            cover: "born_in_the_usa_cover"
         },
         darkness: {
             name: "Darkness on the Edge of Town",
             year: 1978,
             cover: "darkness_cover"
-        }, greatest_hits: {
+        }, 
+        greatest_hits: {
             name: "Great Hits",
             year: 1995,
             cover: "greatest_hits_cover"
@@ -44,7 +45,7 @@ export default {
          the_river: {
             name: "The River",
             year: 1980,
-            cover: "river_cover"
+            cover: "the_river_cover"
         },
         tunnel_of_love: {
             name: "Tunnel of Love",
@@ -90,7 +91,7 @@ export default {
             title: "Born in the U.S.A.",
             artist: "Bruce Springsteen",
             file: "born_in_the_usa",
-            albumId: "born_in_usa"
+            albumId: "born_in_the_usa"
         },
        {
             title: "Brilliant Disguise",
@@ -108,7 +109,7 @@ export default {
             title: "Glory Days", 
             artist: "Bruce Springsteen",
             file: "glory_days",
-            albumId: "born_in_usa"
+            albumId: "born_in_the_usa"
         }, 
         { title: "Human Touch",
             artist: "Bruce Springsteen",
@@ -125,7 +126,7 @@ export default {
             title: "I'm on Fire",
             artist: "Bruce Springsteen",
             file: "im_on_fire",
-            albumId: "born_in_usa"
+            albumId: "born_in_the_usa"
         },
         {
             title: "Murder Incorporated",
@@ -136,7 +137,7 @@ export default {
             title: "My Hometown",
             artist: "Bruce Springsteen",
             file: "my_hometown",
-            albumId: "burn_in_usa"
+            albumId: "born_in_the_usa"
         },
         
         {

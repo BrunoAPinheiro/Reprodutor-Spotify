@@ -407,6 +407,9 @@ body {
     .track-info {
         padding: 5px; /* Padding reduzido em telas pequenas */
     }
+    .control-buttons {
+        font-size: 1.7rem; 
+    }
 }
 
 @media (max-height: 600px) {
@@ -419,6 +422,9 @@ body {
 
     .track-info {
         margin-top: -3px;
+    }
+    .control-buttons {
+        font-size: 1.7rem;
     }
 }
 
@@ -437,4 +443,9 @@ body {
     .track-info {
         padding: 2px 5px;
     }
+    
+    .control-buttons {
+        font-size: 1.4rem;
+    }
+
 }
