@@ -84,7 +84,7 @@ export default {
         {
             title: "Born to Run",
             artist: "Bruce Springsteen",
-            file: "blood_brothers",
+            file: "born_to_run",
             albumId: "greatest_hits"
         },
         {
